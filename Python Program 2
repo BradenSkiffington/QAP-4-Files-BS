@@ -1,0 +1,36 @@
+# QAP 4 - Project 1
+# Author: Braden Skiffington
+# Date Written: March 21 2023
+
+'''
+Create a second Python program that will allow the
+user to enter the total amount of sales for each month
+from January to December –note that if it not the end
+of the year some of the monthly values may be 0.
+Place the values in a list representing the y-axis.  V
+alues for the x-axis will be the months in the form “Jan”,
+“Feb”, “Mar”, ...  Use Matplotlib to create a graph of the total
+sales($) against the months using the two lists created.
+'''
+
+# Import Libraries
+import matplotlib.pyplot as plt
+
+# Lists
+months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+# User input for sales
+sales = []
+for i in range(12):
+    sales.append(float(input(f"Enter the total sales for {months[i]}: ")))
+
+# Graph the sales
+plt.plot(months, sales)
+
+# Give titles for the graph
+plt.title("Total Sales by Month")
+plt.xlabel("Month")
+plt.ylabel("Sales ($)")
+
+# Show the graph
+plt.show()
