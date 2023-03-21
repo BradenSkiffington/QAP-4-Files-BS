@@ -1,0 +1,312 @@
+# QAP 4 - Project 1
+# Author: Braden Skiffington
+# Written on March 17 2023
+
+'''
+The One  Stop  Insurance  Companyneeds  a  program  to  enter  and  calculate  new  insurance
+policy information for its customers. Create a data file called OSICDef.dat that contains the
+next policy number, the basic premium, the discount for additional cars, the cost of extra l
+iability coverage, the cost of glass coverage, the cost for loaner car coverage, the HST rate,
+and the processing fee for monthly payments.
+'''
+
+# Import libraries
+import time
+import datetime
+import FormatValues as FV
+
+# Read constants from the Defaults.dat
+f = open("OSICDef.dat", "r")
+POLICY_NUMBER = int(f.readline())
+BASIC_PREMIUM = float(f.readline())
+DISCOUNT_FOR_ADD_CARS = float(f.readline())
+EXTRA_LIABILITY_COVERAGE = float(f.readline())
+GLASS_COVERAGE = float(f.readline())
+LOANER_CAR_COVERAGE = float(f.readline())
+HST_RATE = float(f.readline())
+MONTHLY_PROCESSING_FEE = float(f.readline())
+f.close()
+
+# Lists
+validProvinces = ['AB', 'BC', 'MB', 'NB', 'NL', 'NT', 'NS', 'NU', 'ON', 'PE', 'QC', 'SK', 'YT']
+validCharacters = set("ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz-'.")
+validDigits = set("1234567890")
+
+
+# Current Date
+currentDate = datetime.date.today()
+
+# Main program loop
+while True:
+    # User input
+
+    # Customer first name
+    while True:
+        customerFirstName = input("Enter customer's first name (END to quit): ").title()
+
+        if customerFirstName == "End":
+            break
+        elif customerFirstName == "":
+            print("Cannot be blank - please reenter.")
+        elif customerFirstName == " ":
+            print("Cannot be blank - please reenter.")
+        elif not customerFirstName.isalpha():
+            print("Must contain only letters - please reenter.")
+        elif set(customerFirstName).issubset(validCharacters):
+            break
+        else:
+            ("Cannot process - please reenter.")
+
+    if customerFirstName == "End":
+        break
+
+    # Customer last name
+    while True:
+        customerLastName = input("Enter customer's last name: ").title()
+
+        if customerLastName == "":
+            print("Cannot be blank - please reenter.")
+        elif customerLastName == " ":
+            print("Cannot be blank - please reenter.")
+        elif not customerLastName.isalpha():
+            print("Must contain only letters - please reenter.")
+        elif set(customerLastName).issubset(validCharacters):
+            break
+        else:
+            ("Cannot process - please reenter.")
+
+
+    # Customer address
+    while True:
+        customerAddress = input("Enter customer's street address: ").title()
+
+        if customerAddress == " " or customerAddress == "":
+            print("Address cannot be blank - please reenter.")
+        else:
+            break
+
+    # Customer city
+    while True:
+        customerCity = input("Enter customer's city: ").title()
+
+        if customerCity == " " or customerCity[0] == " ":
+            print("City cannot be blank - please reenter.")
+        elif set(customerCity).issubset(validCharacters):
+            break
+
+    # Customer province
+    while True:
+        customerProvince = input("Enter customer's province (XX): ").upper()
+
+        if customerProvince in validProvinces:
+            break
+        else:
+            ("Cannot process - please reenter")
+
+    # Customer postal code
+    while True:
+        customerPostalCode = input("Customer's postal code (A1A1A1): ").upper()
+        if len(customerPostalCode) != 6:
+            print("Postal code must be 6 characters - please reenter")
+        elif customerPostalCode[0].isalpha() and customerPostalCode[2].isalpha() and customerPostalCode[4].isalpha() and customerPostalCode[1].isdigit() and customerPostalCode[3].isdigit() and customerPostalCode[5].isdigit():
+            break
+        else:
+            print("Invalid postal code, must be formatted (A1A1A1) - please reenter")
+    # Customer phone number
+    while True:
+        customerPhoneNumber = input("Enter customer's phone number (9999999999): ")
+        if len(customerPhoneNumber) != 10:
+            print()
+            print("Phone number must be 10 digits - please reenter")
+        elif set(customerPhoneNumber).issubset(validDigits) and len(customerPhoneNumber) == 10:
+            CusPhoneNum = (
+                f"({customerPhoneNumber[:3]}) {customerPhoneNumber[3:6]}-{customerPhoneNumber[6:]}")
+            break
+        else:
+            print()
+            print("Invalid phone number - please reenter")
+
+    # Vehicles being insured
+    while True:
+        vehiclesInsured = input("Enter the number of vehicles insured: ")
+        try:
+            vehiclesInsured = int(vehiclesInsured)
+            if vehiclesInsured < 1:
+                print("Must be over 1 - please reenter.")
+                continue
+        except:
+            print("Must enter a valid number.")
+        else:
+            break
+
+    # Extra liability options
+    while True:
+        extraLiabilityOptions = input("Extra liability (Y - N): ").upper()
+
+        if extraLiabilityOptions == "Y":
+            extraLiabilityCost = EXTRA_LIABILITY_COVERAGE * vehiclesInsured
+            break
+        elif extraLiabilityOptions == "N":
+            extraLiabilityCost = 0
+            break
+        elif extraLiabilityOptions == "" or extraLiabilityOptions == " ":
+            print("Cannot be blank - please choose an option.")
+        else:
+            print("Not a valid option - please try again.")
+
+
+    # Optional glass coverage
+    while True:
+        optionalGlassCoverage = input("Glass coverage options (Y - N): ").upper()
+
+        if optionalGlassCoverage == "Y":
+            optionalGlassCost = GLASS_COVERAGE * vehiclesInsured
+            break
+        elif optionalGlassCoverage == "N":
+            optionalGlassCost = 0
+            break
+        elif optionalGlassCoverage == "" or optionalGlassCoverage == " ":
+            print("Cannot be blank - please choose an option.")
+        else:
+            print("Invalid option - please reenter.")
+
+    # Optional loaner car
+    while True:
+        loanerCarOption = input("Loaner car (Y - N): ").upper()
+
+        if loanerCarOption == "Y":
+            loanerCarCost = LOANER_CAR_COVERAGE * vehiclesInsured
+            break
+        elif loanerCarOption == "N":
+            loanerCarCost = 0
+            break
+        elif loanerCarOption == "" or loanerCarOption == " ":
+            print("Cannot be blank - please reenter.")
+        else:
+            print("Invalid option - please reenter.")
+
+    # Payment Options
+    while True:
+        paymentOption = input("How would you like to pay? Pay in full or monthly payments (F - M): ").upper()
+
+        if paymentOption == "F":
+            break
+        if paymentOption == "M":
+            break
+        elif paymentOption == "" or paymentOption == " ":
+            ("Cannot be blank - please choose an option.")
+        else:
+            print("Invalid option - please reenter.")
+
+    # Program calculations
+    insurancePremiumCost = ((vehiclesInsured - 1) * (BASIC_PREMIUM * .75) + BASIC_PREMIUM)
+    totalExtraCosts = extraLiabilityCost + optionalGlassCost + loanerCarCost
+    insurancePremiumTotal = insurancePremiumCost + totalExtraCosts
+    HST = insurancePremiumTotal * HST_RATE
+    totalCost = insurancePremiumTotal + HST
+    customerFullName = (customerFirstName + " " + customerLastName)
+
+
+    # Customer payment calculation
+    totalCostDSP = FV.FDollar2(totalCost)
+    if paymentOption == "F":
+        customerPayment = totalCost
+        nextPaymentDate = "N/A"
+    if paymentOption == "M":
+        customerPayment = (totalCost + MONTHLY_PROCESSING_FEE) / 8
+        nextPaymentDate = datetime.date(currentDate.year, currentDate.month + 1, 1)
+
+    # Format values from FormatValues
+    extraLiabilityCostDSP = FV.FDollar2(extraLiabilityCost)
+    optionalGlassCostDSP = FV.FDollar2(optionalGlassCost)
+    loanerCarCostDSP = FV.FDollar2(loanerCarCost)
+    insurancePremiumCostDSP = FV.FDollar2(insurancePremiumCost)
+    totalExtraCostsDSP = FV.FDollar2(totalExtraCosts)
+    insurancePremiumTotalDSP = FV.FDollar2(insurancePremiumTotal)
+    HST_DSP = FV.FDollar2(HST)
+    customerPaymentDSP = FV.FDollar2(customerPayment)
+
+    # Display outputs
+    print()
+    print(f"------------------------------------------------")
+    print(f"               One Stop Insurance               ")
+    print(f"------------------------------------------------")
+    print(f"Customer Name:           {customerFullName:>20s}")
+    print()
+    print(f"Customer Address                                ")
+    print(f"----------------                                ")
+    print(f"{customerAddress:<25s}                          ")
+    print(f"{customerCity:>15s}, {customerProvince:>2s}, {customerPostalCode:>6s} ")
+    print(f"------------------------------------------------")
+    print(f"Phone Number:            {customerPhoneNumber:>10s}")
+    print(f"Vehicles Insured:        {vehiclesInsured:>10d} ")
+    print()
+    print(f"Options for {customerFirstName:<10s}           Costs ")
+    print(f"------------------------------------------------")
+    print(f"Extra Liability: {extraLiabilityOptions:>1s},{extraLiabilityCostDSP:>21}")
+    print(f"Glass Coverage:  {optionalGlassCoverage:>1s},{optionalGlassCostDSP:>21}")
+    print(f"Loaner Coverage: {loanerCarOption:>1s},{loanerCarCostDSP:>21}")
+    print()
+    print(f"{customerFullName}'s Costs                         ")
+    print(f"-------------------------------------------------")
+    print(f"Insurance Premium:        {insurancePremiumCostDSP:>15}")
+    print(f"Total Extra Costs:      {totalExtraCostsDSP:>15}")
+    print(f"Insurance Premium Total:  {insurancePremiumTotalDSP:>15}")
+    print(f"HST:                    {HST_DSP:>15} ")
+    print(f"-------------------------------------------------")
+    print(f"Total Cost:               {totalCostDSP:>15}")
+    print(f"-------------------------------------------------")
+    print(f"Payment Plan: {paymentOption}    {customerPaymentDSP:>20}")
+    print(f"Next Payment Date:              {nextPaymentDate}")
+    print(f"------------------------------------------------")
+    print(f"            Thanks for using One Stop!          ")
+    print(f"------------------------------------------------")
+    print()
+    print()
+
+    # Save information to the file "Policies.dat"
+    file = open("Policies.dat", "a")
+
+    file.write("{}, ".format(str(POLICY_NUMBER)))
+    file.write("{}, ".format(str(currentDate)))
+    file.write("{}, ".format(str(customerFirstName)))
+    file.write("{}, ".format(str(customerLastName)))
+    file.write("{}, ".format(str(customerAddress)))
+    file.write("{}, ".format(str(customerCity)))
+    file.write("{}, ".format(str(customerProvince)))
+    file.write("{}, ".format(str(customerPostalCode)))
+    file.write("{}, ".format(str(customerPhoneNumber)))
+    file.write("{}, ".format(str(vehiclesInsured)))
+    file.write("{}, ".format(str(extraLiabilityOptions)))
+    file.write("{}, ".format(str(optionalGlassCoverage)))
+    file.write("{}, ".format(str(loanerCarOption)))
+    file.write("{}, ".format(str(paymentOption)))
+    file.write("{}\n".format(str(totalCostDSP)))
+
+    file.close()
+
+    # Increasing policy number by 1
+    POLICY_NUMBER += 1
+
+# Updating the "OSICDef.dat" file
+f = open("OSICDef.dat", "w")
+
+f.write("{}\n".format(str(POLICY_NUMBER)))
+f.write("{}\n".format(str(BASIC_PREMIUM)))
+f.write("{}\n".format(str(DISCOUNT_FOR_ADD_CARS)))
+f.write("{}\n".format(str(EXTRA_LIABILITY_COVERAGE)))
+f.write("{}\n".format(str(GLASS_COVERAGE)))
+f.write("{}\n".format(str(LOANER_CAR_COVERAGE)))
+f.write("{}\n".format(str(HST_RATE)))
+f.write("{}\n".format(str(MONTHLY_PROCESSING_FEE)))
+
+f.close()
+
+# Display message that the program was successfully saved
+print()
+print("Saving information...")
+time.sleep(3)
+print()
+print("Information processed and saved successfully.")
+print()
+exit()
